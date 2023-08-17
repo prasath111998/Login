@@ -1,24 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+// App.js
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes, RouteProps } from 'react-router-dom';
+import './App.css'; // Import your CSS file for styling
+import Login from './LoginPage';
+import Welcome from './Welcome';
+import { useNavigate } from 'react-router-dom';
 
 function App() {
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [username, setUsername] = useState('');
+  const navigate = useNavigate();
+
+  const handleLogin = (email) => {
+    // Extract username from email (example)
+    const extractedUsername = email.split('@')[0];
+    setUsername(extractedUsername);
+    setLoggedIn(true);
+    navigate('/welcome');
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    
+      <div className="app">
+        <Routes>
+          <Route path="/" element={<Login onLogin={handleLogin} />} />
+          <Route
+            path="/welcome"
+            element={loggedIn ? <Welcome username={username} /> : <Login onLogin={handleLogin} />}
+          />
+        </Routes>
+      </div>
+  
   );
 }
 
